@@ -1,0 +1,60 @@
+{
+  "name": "@bigspin/cli",
+  "version": "0.1.0",
+  "description": "Bigspin CLI - Command-line interface for the Bigspin API",
+  "type": "module",
+  "bin": {
+    "bigspin": "./bin/run.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --loader tsx bin/dev.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "oclif": {
+    "bin": "bigspin",
+    "dirname": "bigspin",
+    "commands": "./dist/commands",
+    "topicSeparator": " ",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-version",
+      "@oclif/plugin-not-found"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "author": "Bigspin AI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bigspinai/bigspin-cli.git"
+  },
+  "homepage": "https://github.com/bigspinai/bigspin-cli#readme",
+  "bugs": "https://github.com/bigspinai/bigspin-cli/issues",
+  "keywords": ["bigspin", "cli", "api", "transcripts", "analytics", "ai", "evaluation"],
+  "license": "MIT",
+  "dependencies": {
+    "@oclif/core": "^4",
+    "@oclif/plugin-help": "^6",
+    "@oclif/plugin-not-found": "^3",
+    "@oclif/plugin-version": "^2",
+    "@oclif/table": "^0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "tsx": "^4",
+    "typescript": "^5.7",
+    "vitest": "^3"
+  }
+}

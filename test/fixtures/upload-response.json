@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "data": {
+    "id": "transcript-1",
+    "workspaceId": "ws-1",
+    "name": "Test Transcript",
+    "modelName": "gpt-4",
+    "language": "en",
+    "sourceSystem": null,
+    "externalId": null,
+    "externalUserId": null,
+    "sourceTimestamp": null,
+    "turnCount": 3,
+    "userTurnCount": 2,
+    "assistantTurnCount": 1,
+    "totalTokenCount": 150,
+    "userTokenCount": 100,
+    "assistantTokenCount": 50,
+    "createdAt": "2026-03-15T10:30:00Z",
+    "createdBy": "api-key"
+  },
+  "processing_time_ms": 120
+}
