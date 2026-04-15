@@ -86,30 +86,30 @@ export interface TranscriptDetail extends TranscriptSummary {
   annotations: Record<string, string>;
 }
 
-export interface IssueQuote {
+export interface InsightQuote {
   text: string;
   transcript_id: string;
   speaker?: string;
 }
 
-export interface IssueCategoryBreakdown {
+export interface InsightCategoryBreakdown {
   category: string;
   count: number;
 }
 
-export interface Issue {
+export interface Insight {
   rank: number;
   title: string;
   description: string;
   tags: string[];
   severity: string;
   flagged_count: number;
-  quotes: IssueQuote[];
+  quotes: InsightQuote[];
   why_it_matters: {
     user_impact: string;
     action_to_take: string;
   };
-  category_breakdown: IssueCategoryBreakdown[];
+  category_breakdown: InsightCategoryBreakdown[];
   transcript_ids: string[];
 }
 
