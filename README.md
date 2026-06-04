@@ -3,7 +3,7 @@
 Command-line interface for the [Bigspin](https://app.bigspin.ai) API. Manage projects, transcripts, and issues from your terminal.
 
 ```bash
-npm install -g @bigspin/cli
+npm install -g @bigspinai/cli
 ```
 
 ## Installation
@@ -11,13 +11,13 @@ npm install -g @bigspin/cli
 ### From npm (recommended)
 
 ```bash
-npm install -g @bigspin/cli
+npm install -g @bigspinai/cli
 ```
 
 ### Run without installing
 
 ```bash
-npx @bigspin/cli <command>
+npx @bigspinai/cli <command>
 ```
 
 ### From source
@@ -36,7 +36,7 @@ Requires Node.js >= 20.0.0.
 
 ```bash
 # 1. Install
-npm install -g @bigspin/cli
+npm install -g @bigspinai/cli
 
 # 2. Authenticate (get your key from https://app.bigspin.ai -> Settings -> API Keys)
 bigspin auth login

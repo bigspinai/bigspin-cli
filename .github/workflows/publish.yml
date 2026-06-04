@@ -1,0 +1,77 @@
+name: Publish to npm
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # create tag + GitHub Release
+  id-token: write # npm trusted publishing (OIDC) + automatic provenance
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @bigspinai/cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # full history so --generate-notes has commits to summarize
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.19.0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.x
+          registry-url: https://registry.npmjs.org
+
+      - name: Upgrade npm for trusted publishing (OIDC needs npm >= 11.5)
+        run: npm install -g npm@11.16.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-workspace
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Check if version needs publishing
+        id: gate
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          PUBLISHED=$(npm view "${PKG_NAME}@${LOCAL_VERSION}" version 2>/dev/null || true)
+          if [ "$PUBLISHED" = "$LOCAL_VERSION" ]; then
+            echo "Version ${LOCAL_VERSION} already on npm — skipping."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version ${LOCAL_VERSION} not on npm — will publish."
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "version=${LOCAL_VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to npm (trusted publishing — provenance is automatic)
+        if: steps.gate.outputs.should_publish == 'true'
+        run: npm publish
+
+      - name: Create GitHub Release
+        if: steps.gate.outputs.should_publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.gate.outputs.version }}
+        run: |
+          if gh release view "v${VERSION}" >/dev/null 2>&1; then
+            echo "Release v${VERSION} already exists — skipping."
+          else
+            gh release create "v${VERSION}" \
+              --title "v${VERSION}" \
+              --generate-notes
+          fi
